@@ -15,14 +15,14 @@ class Location(db.Model):
 
     def __init__(self, **kwargs):
         """
-        TODO
+        TODO: documentation
         """
         self.description = kwargs.get("description")
         self.passcode = kwargs.get("passcode")
 
     def serialize_location(self):
         """
-        TODO
+        TODO: documentation
         """
         return {
             "location_id": self.location_id,
@@ -42,14 +42,14 @@ class Message(db.Model):
 
     def __init__(self, **kwargs):
         """
-        TODO
+        TODO: documentation
         """
         self.description = kwargs.get("description", "")
         self.location_id = kwargs.get("location_id")
 
     def serialize_message(self):
         """
-        TODO
+        TODO: documentation
         """
         return {
             "message_id": self.message_id,
@@ -68,13 +68,13 @@ class Leaderboard(db.Model):
 
     def __init__(self, **kwargs):
         """
-        TODO
+        TODO: documentation
         """
         pass
 
     def serialize_leaderboard(self):
         """
-        TODO
+        TODO: documentation
         """
         return {
             "location_id": self.location_id,

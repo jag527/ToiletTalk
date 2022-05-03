@@ -1,4 +1,6 @@
 # db.py
+# AUTHOR: Jonathan Grossman (jag527)
+
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 

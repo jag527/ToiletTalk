@@ -8,7 +8,7 @@ class Location(db.Model):
     Locations model
     """
     __tablename__ = "locations"
-    location_id = db.Column(db.Integer, primary_key=True)
+    location_id = db.Column(db.String, primary_key=True)
     description = db.Column(db.String, nullable=False)
     passcode = db.Column(db.Integer, nullable=False)
     messages = db.Relationship("Message")
@@ -38,7 +38,7 @@ class Message(db.Model):
     __tablename__ = "messages"
     message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String, nullable=False)
-    location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"), nullable=False)
+    location_id = db.Column(db.String, db.ForeignKey("locations.location_id"), nullable=False)
 
     def __init__(self, **kwargs):
         """
@@ -63,7 +63,7 @@ class Leaderboard(db.Model):
     Leaderboards model
     """
     __tablename__ = "leaderboards"
-    location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"), nullable=False)
+    location_id = db.Column(db.String, db.ForeignKey("locations.location_id"), nullable=False)
     message_counter = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):

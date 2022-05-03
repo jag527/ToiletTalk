@@ -56,3 +56,35 @@ def get_message_by_id():
     Endpoint for getting a specific message given its message_id
     """
     pass
+
+
+@app.route("/api/messages/", methods=["POST"])
+def post_message():
+    """
+    Endpoint for posting a new message
+    """
+    pass
+
+
+@app.route("/api/messages/<int:message_id>/", methods=["DELETE"])
+def delete_message_by_id():
+    """
+    Endpoint for deleting a specific message given its message_id
+    """
+    pass
+
+
+@app.route("/api/locations/", methods=["POST"])
+def log_in_attempt():
+    """
+    Endpoint for an attempted log into chat room
+    """
+    pass
+
+
+@app.route("/api/leaderboard/")
+def get_leaderboard():
+    """
+    Endpoint for getting the leaderboard
+    """
+    pass

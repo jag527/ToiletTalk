@@ -17,14 +17,14 @@ class Location(db.Model):
 
     def __init__(self, **kwargs):
         """
-        TODO: documentation
+        Creates table of locations and their passcodes
+        Messages starts off empty
         """
-        self.description = kwargs.get("description")
-        self.passcode = kwargs.get("passcode")
+        pass
 
     def serialize_location(self):
         """
-        TODO: documentation
+        Serializes a location into dictionary/json form
         """
         return {
             "location_id": self.location_id,
@@ -44,14 +44,14 @@ class Message(db.Model):
 
     def __init__(self, **kwargs):
         """
-        TODO: documentation
+        Creates a message from a given location with a given description
         """
         self.description = kwargs.get("description", "")
         self.location_id = kwargs.get("location_id")
 
     def serialize_message(self):
         """
-        TODO: documentation
+        Serializes a message into dictionary/json form
         """
         return {
             "message_id": self.message_id,
@@ -70,13 +70,14 @@ class Leaderboard(db.Model):
 
     def __init__(self, **kwargs):
         """
-        TODO: documentation
+        Create table for leaderboard, with all location IDs and with
+        all message_counters at 0
         """
         pass
 
     def serialize_leaderboard(self):
         """
-        TODO: documentation
+        Serializes a leaderboard spot into dictionary/json form
         """
         return {
             "location_id": self.location_id,
@@ -85,6 +86,6 @@ class Leaderboard(db.Model):
 
     def increment_message_counter(self):
         """
-        TODO: documentation
+        Increases the message counter for a location by 1
         """
         self.message_counter = self.message_counter + 1

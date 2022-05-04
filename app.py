@@ -47,15 +47,18 @@ def get_all_messages():
     """
     Endpoint for getting all messages
     """
-    pass
+    return success_response({"messages": [m.serialize_message() for m in Message.query.all()]})
 
 
-@app.route("/api/messages/<int:message_id>")
-def get_message_by_id():
+@app.route("/api/messages/<int:message_id>/")
+def get_message_by_id(message_id):
     """
     Endpoint for getting a specific message given its message_id
     """
-    pass
+    message = Message.query.filter_by(message_id=message_id)
+    if message is None:
+        return failure_response("Message does not exist.")
+    return success_response(Message.serialize_message())
 
 
 @app.route("/api/messages/", methods=["POST"])
@@ -63,18 +66,39 @@ def post_message():
     """
     Endpoint for posting a new message
     """
-    pass
+    body = json.loads(request.data)
+
+    location = body.get("location_id")
+    descr = body.get("description")
+
+    # Checks if the Location ID is in the database (valid location)
+    loc_check = Location.query.filter_by(location_id=location)
+    if loc_check is None:
+        return failure_response("Message from invalid location.")
+
+    new_message = Message(location_id=location, description=descr)
+
+    db.session.add(new_message)
+    db.session.commit()
+
+    return success_response(new_message.serialize_message(), 201)
 
 
-@app.route("/api/messages/<int:message_id>/", methods=["DELETE"])
-def delete_message_by_id():
+@ app.route("/api/messages/<int:message_id>/", methods=["DELETE"])
+def delete_message_by_id(message_id):
     """
     Endpoint for deleting a specific message given its message_id
     """
-    pass
+    message = Message.query.filter_by(message_id=message_id).first()
+    if message is None:
+        return failure_response("Messgae does not exist.")
+
+    db.session.delete(message)
+    db.session.commit()
+    return success_response(message.serialize_message())
 
 
-@app.route("/api/locations/", methods=["POST"])
+@ app.route("/api/locations/", methods=["POST"])
 def log_in_attempt():
     """
     Endpoint for an attempted log into chat room
@@ -82,9 +106,9 @@ def log_in_attempt():
     pass
 
 
-@app.route("/api/leaderboard/")
+@ app.route("/api/leaderboard/")
 def get_leaderboard():
     """
     Endpoint for getting the leaderboard
     """
-    pass
+    return success_response({"leaderboard": [l.serialize_leaderboard() for l in Leaderboard.query.all()]})

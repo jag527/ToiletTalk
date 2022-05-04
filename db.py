@@ -1,5 +1,5 @@
 # db.py
-# AUTHOR: Jonathan Grossman (jag527)
+# AUTHOR: Jonathan Grossman
 
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()

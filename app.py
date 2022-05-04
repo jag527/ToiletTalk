@@ -47,7 +47,9 @@ def get_all_messages():
     """
     Endpoint for getting all messages
     """
-    return success_response({"messages": [m.serialize_message() for m in Message.query.all()]})
+    return success_response(
+        {"messages": [m.serialize_message() for m in Message.query.all()]}
+    )
 
 
 @app.route("/api/messages/<int:message_id>/")
@@ -76,7 +78,15 @@ def post_message():
     if loc_check is None:
         return failure_response("Message from invalid location.")
 
+    # Make new message object
     new_message = Message(location_id=location, description=descr)
+
+    # Add message to the location's list of messages
+    loc_check.messages.append(new_message)
+
+    # Increment the location's message counter on the leaderboard
+    loc_leaderboard = Leaderboard.query.filter_by(location_id=location)
+    loc_leaderboard.increment_message_counter()
 
     db.session.add(new_message)
     db.session.commit()
@@ -99,11 +109,26 @@ def delete_message_by_id(message_id):
 
 
 @ app.route("/api/locations/", methods=["POST"])
-def log_in_attempt():
+def enter_toilettalk():
     """
-    Endpoint for an attempted log into chat room
+    Endpoint for an attempted log into ToiletTalk
     """
-    pass
+    body = json.loads(request.data)
+
+    location = body.get("location")
+    password = body.get("password")
+
+    if location is None or password is None:
+        return failure_response("Invalid input.")
+
+    # Checking if the location and its passcode line up
+    location_db = Location.query.filter_by(location_id=location)
+
+    if location_db.passcode == password:
+        return success_response({"valid?": True})
+
+    if location_db.passcode != password:
+        return success_response({"valid?": False})
 
 
 @ app.route("/api/leaderboard/")
@@ -111,4 +136,6 @@ def get_leaderboard():
     """
     Endpoint for getting the leaderboard
     """
-    return success_response({"leaderboard": [l.serialize_leaderboard() for l in Leaderboard.query.all()]})
+    return success_response(
+        {"leaderboard": [l.serialize_leaderboard() for l in Leaderboard.query.all()]}
+    )

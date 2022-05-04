@@ -82,3 +82,9 @@ class Leaderboard(db.Model):
             "location_id": self.location_id,
             "message_counter": self.message_counter
         }
+
+    def increment_message_counter(self):
+        """
+        TODO: documentation
+        """
+        self.message_counter = self.message_counter + 1

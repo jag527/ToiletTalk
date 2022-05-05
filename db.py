@@ -10,23 +10,24 @@ class Location(db.Model):
     Locations model
     """
     __tablename__ = "locations"
-    location_id = db.Column(db.String, primary_key=True)
-    description = db.Column(db.String, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    location_id = db.Column(db.String, nullable=False)
     passcode = db.Column(db.Integer, nullable=False)
-    messages = db.Relationship("Message")
+    messages = db.relationship("Message")
 
     def __init__(self, **kwargs):
         """
-        Creates table of locations and their passcodes
-        Messages starts off empty
+        Creates a location from a given id and passcode
         """
-        pass
+        self.location_id = kwargs.get("location_id")
+        self.passcode = kwargs.get("passcode")
 
     def serialize_location(self):
         """
         Serializes a location into dictionary/json form
         """
         return {
+            "id": self.id,
             "location_id": self.location_id,
             "passcode": self.passcode,
             "messages": [m.serialize_message() for m in self.messages]
@@ -65,15 +66,17 @@ class Leaderboard(db.Model):
     Leaderboards model
     """
     __tablename__ = "leaderboards"
-    location_id = db.Column(db.String, db.ForeignKey("locations.location_id"), nullable=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    location_id = db.Column(db.String, nullable=False)
     message_counter = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **kwargs):
         """
-        Create table for leaderboard, with all location IDs and with
-        all message_counters at 0
+        Creates a leaderboard spot for a certain location with initial message
+        counter value 0
         """
-        pass
+        self.location_id = kwargs.get("location_id")
+        self.message_counter = 0
 
     def serialize_leaderboard(self):
         """

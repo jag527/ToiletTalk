@@ -92,3 +92,9 @@ class Leaderboard(db.Model):
         Increases the message counter for a location by 1
         """
         self.message_counter = self.message_counter + 1
+
+    def decrement_message_counter(self):
+        """
+        Decreases the message counter for a location by 1
+        """
+        self.message_counter = self.message_counter - 1

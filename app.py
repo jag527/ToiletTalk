@@ -94,7 +94,7 @@ def get_message_by_id(message_id):
     if message is None:
         return failure_response("Message does not exist.")
 
-    return success_response(Message.serialize_message())
+    return success_response(message.serialize_message())
 
 
 @ app.route("/api/messages/", methods=["POST"])
@@ -136,6 +136,11 @@ def delete_message_by_id(message_id):
     message = Message.query.filter_by(message_id=message_id).first()
     if message is None:
         return failure_response("Messgae does not exist.")
+
+    location = message.location_id
+    # Decrement the location's message counter on the leaderboard
+    loc_leaderboard = Leaderboard.query.filter_by(location_id=location).first()
+    loc_leaderboard.decrement_message_counter()
 
     db.session.delete(message)
     db.session.commit()

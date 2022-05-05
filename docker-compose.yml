@@ -1,0 +1,6 @@
+version: '3'
+services:
+  demo:
+    image: jgrossman20/toilettalk
+    ports:
+      - "5000:5000"

@@ -49,7 +49,6 @@ def baseline_toilettalk_tables():
 # initialize app
 db.init_app(app)
 with app.app_context():
-    print("HERE")
     db.create_all()
 
     # add baseline values to tables
@@ -183,7 +182,7 @@ def get_leaderboard():
     )
 
 
-@app.route("/api/locations/")
+@ app.route("/api/locations/")
 def get_location_passcodes():
     """
     Endpoint for getting all locations and their passcodes

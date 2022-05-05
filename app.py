@@ -69,9 +69,9 @@ def failure_response(message, code=404):
 @ app.route("/")
 def blank_route():
     """
-    Endpoint for a blank route
+    Endpoint for a blank route/homescreen
     """
-    pass
+    return success_response({"homescreen": "hello world"})
 
 
 @ app.route("/api/messages/")

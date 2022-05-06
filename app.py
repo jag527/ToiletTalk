@@ -199,16 +199,23 @@ def upload():
     then storing/returning the URL of that image
     """
     body = json.loads(request.data)
+    location_id = body.get("location_id")
+
+    # Checking if the location is valid
+    location_db = Location.query.filter_by(location_id=location_id).first()
+    if location_db is None:
+        return failure_response("Invalid location_id.")
+
     image_data = body.get("image_data")
     if image_data is None:
         return failure_response("No base64 image passed in!")
 
     # create new Asset object
-    asset = ToiletPic(image_data=image_data)
-    db.session.add(asset)
+    pic = ToiletPic(image_data=image_data, location_id=location_id)
+    db.session.add(pic)
     db.sesesion.commit()
 
-    return success_response(asset.serialize(), 201)
+    return success_response(pic.serialize(), 201)
 
 
 if __name__ == "__main__":

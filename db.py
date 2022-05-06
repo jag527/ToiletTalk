@@ -17,6 +17,11 @@ import string
 
 db = SQLAlchemy()
 
+EXTENSIONS = ["png", "gif", "jpg", "jpeg"]
+BASE_DIR = os.getcwd()
+S3_BUCKET_NAME = os.environ.get("S3_BUCKET_NAME")
+S3_BASE_URL = f"https://{S3_BUCKET_NAME}.s3.us-east-2.amazonaws.com"
+
 
 class Location(db.Model):
     """
@@ -122,7 +127,13 @@ class ToiletPic(db.Model):
     base_url = db.Column(db.String, nullable=False)
     salt = db.Column(db.String, nullable=False)
     extension = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
+    location_id = db.Column(db.String, nullable=False)
+
+    def __init__(self, **kwargs):
+        """
+        Creates and uploads an image
+        """
+        self.create(kwargs.get("image_data"))
 
     def create(self, image_data):
         """
@@ -131,7 +142,6 @@ class ToiletPic(db.Model):
         2. Generates a random string for the image filename
         3. Decodes the image and attempts to upload it to AWS
         """
-
         try:
             ext = guess_extension(guess_type(image_data)[0])[1:]
 
@@ -157,7 +167,6 @@ class ToiletPic(db.Model):
             self.extension = ext
             self.width = img.width
             self.height = img.height
-            self.created_at = datetime.datetime.now()
 
             img_filename = f"{self.salt}.{self.extension}"
             self.upload(img, img_filename)
@@ -193,5 +202,5 @@ class ToiletPic(db.Model):
         """
         return {
             "url": f"{self.base_url}/{self.salt}.{self.extension}",
-            "created": str(self.created_at)
+            "location_id": self.location_id
         }

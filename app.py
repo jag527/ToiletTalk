@@ -4,7 +4,7 @@
 
 import json
 
-from db import db, Location, Leaderboard, Message
+from db import db, Location, Leaderboard, Message, ToiletPic
 from flask import Flask, request
 
 
@@ -190,6 +190,25 @@ def get_location_passcodes():
     return success_response(
         {"locations": [l.serialize_location() for l in Location.query.all()]}
     )
+
+
+@ app.route("/api/upload/", methods=["POST"])
+def upload():
+    """
+    Endpoint for uploading an image to AWS given its base64 form,
+    then storing/returning the URL of that image
+    """
+    body = json.loads(request.data)
+    image_data = body.get("image_data")
+    if image_data is None:
+        return failure_response("No base64 image passed in!")
+
+    # create new Asset object
+    asset = ToiletPic(image_data=image_data)
+    db.session.add(asset)
+    db.sesesion.commit()
+
+    return success_response(asset.serialize(), 201)
 
 
 if __name__ == "__main__":

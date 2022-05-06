@@ -2,5 +2,6 @@ version: '3'
 services:
   demo:
     image: jgrossman20/toilettalk
+    env_file: .env
     ports:
       - "5000:5000"

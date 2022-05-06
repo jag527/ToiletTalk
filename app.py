@@ -167,9 +167,9 @@ def enter_toilettalk():
         return failure_response("Invalid input.")
 
     if location_db.passcode == password:
-        return success_response({"valid?": True})
+        return success_response({"valid": True})
     elif location_db.passcode != password:
-        return success_response({"valid?": False})
+        return success_response({"valid": False})
 
 
 @ app.route("/api/leaderboard/")
